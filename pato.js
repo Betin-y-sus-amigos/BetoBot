@@ -44,9 +44,9 @@ client.on('guildMemberAdd', member => {
   if (!channel) return;
   let embed = new Discord.MessageEmbed()
   .setColor("#427BF5")
-  .setThumbnail(member.avatarURL({dynamic: true, size: 4096}))
+  .setThumbnail(member.user.avatarURL({dynamic: true, size: 4096}))
   .setImage("https://github.com/Betin-y-sus-amigos/BetoBot/blob/main/pato.gif?raw=true")
-  .setTitle("Bienvenido " + member.username);
+  .setTitle("Bienvenido " + member.user.username);
   channel.send(embed);
 });
 
