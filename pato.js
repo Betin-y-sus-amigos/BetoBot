@@ -32,6 +32,9 @@ client.on('message', msg => {
       case "saluda":
         beto.saludar(msg, sazonador)
       break;
+      case "directo":
+        beto.directo(msg)
+      break;
       default:
         msg.channel.send("dime");
       break;
