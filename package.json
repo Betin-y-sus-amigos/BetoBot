@@ -1,0 +1,26 @@
+{
+  "name": "betobot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Betin-y-sus-amigos/BetoBot.git"
+  },
+  "keywords": [
+    "beto"
+  ],
+  "author": "HakkinDavid",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Betin-y-sus-amigos/BetoBot/issues"
+  },
+  "homepage": "https://github.com/Betin-y-sus-amigos/BetoBot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0"
+  }
+}
