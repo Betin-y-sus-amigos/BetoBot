@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm update && node pato.js"
   },
   "repository": {
     "type": "git",
@@ -17,9 +17,6 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Betin-y-sus-amigos/BetoBot/issues"
-  },
-  "scripts": {
-    "start": "npm update && node pato.js",
   },
   "homepage": "https://github.com/Betin-y-sus-amigos/BetoBot#readme",
   "dependencies": {
