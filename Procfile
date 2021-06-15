@@ -1,1 +1,1 @@
-worker: npm update && node pato.js
+BOT: npm start
