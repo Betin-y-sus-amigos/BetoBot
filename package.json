@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Betin-y-sus-amigos/BetoBot#readme",
   "dependencies": {
     "discord.js": "^12.5.3",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "require-all": "^3.0.0"
   }
 }
