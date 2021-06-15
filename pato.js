@@ -46,7 +46,7 @@ client.on('guildMemberAdd', member => {
   .setColor("#427BF5")
   .setDescription("ponte cómodo, beto y su bot te dan la bienvenida.\ncheca el canal de beto en twitch:\nhttps://www.twitch.tv/betinraw")
   .setThumbnail(member.user.avatarURL({dynamic: true, size: 4096}))
-  .setImage("https://github.com/Betin-y-sus-amigos/BetoBot/blob/main/pato.gif?raw=true")
+  .setImage("https://github.com/Betin-y-sus-amigos/BetoBot/blob/main/patosaludando.gif?raw=true")
   .setTitle("Bienvenido " + member.user.username);
   channel.send(embed);
 });
