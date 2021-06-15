@@ -44,6 +44,7 @@ client.on('guildMemberAdd', member => {
   if (!channel) return;
   let embed = new Discord.MessageEmbed()
   .setColor("#427BF5")
+  .setDescription("ponte cómodo, beto y su bot te dan la bienvenida.\ncheca el canal de beto en twitch:\nhttps://www.twitch.tv/betinraw")
   .setThumbnail(member.user.avatarURL({dynamic: true, size: 4096}))
   .setImage("https://github.com/Betin-y-sus-amigos/BetoBot/blob/main/pato.gif?raw=true")
   .setTitle("Bienvenido " + member.user.username);
