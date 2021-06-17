@@ -140,7 +140,7 @@ setInterval(
       client.channels.cache.get(DIRECTOS).send(response.data[0].started_at);
     })
   },
-  30000
+  120000
 );
 
 setInterval(
