@@ -23,6 +23,7 @@
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
     "download-file": "^0.1.5",
+    "request": "^2.88.2",
     "require-all": "^3.0.0"
   }
 }
