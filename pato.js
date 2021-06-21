@@ -41,7 +41,7 @@ getToken(GET_TOKEN,(res) => {
 	return AT;
 });
 
-const getStream = (url, access, callback) =>{
+const getStream = (url, access) => {
   const streamOptions = {
 		url: GET_STREAM,
 		method: "GET",
@@ -59,7 +59,33 @@ const getStream = (url, access, callback) =>{
 			return console.log(err);
 		}
 		console.log(`Status: ${res.statusCode}`);
-		console.log(JSON.parse(body));
+		let response = JSON.parse(body);
+		client.channels.cache.get(DIRECTOS).messages.fetch({ limit: 1 }).then(
+			messages => {
+				let shouldReNotify = messages.first().content;
+				for (servidor in settingsOBJ) {
+					let channel = client.channels.cache.get(settingsOBJ[servidor].notificaciones);
+					if (!channel) return;
+					if (response.data.length < 1) return;
+					console.log("el directo actual data de " + response.data[0].started_at);
+					if (shouldReNotify == response.data[0].started_at) {
+						console.log("ya hay una notificación del mismo");
+						return;
+					}
+					let embed = new Discord.MessageEmbed()
+					.setTitle("¡betinraw está en directo!")
+					.setAuthor("Twitch", "https://img.icons8.com/nolan/452/twitch.png")
+					.setURL("https://www.twitch.tv/betinraw")
+					.setColor("#6441A5")
+					.setDescription(response.data[0].title)
+					.addField(response.data[0].game_name, "Espectadores: " + response.data[0].viewer_count)
+					.setImage(response.data[0].thumbnail_url.replace("{width}", "1920").replace("{height}", "1080"))
+					.setThumbnail(client.users.cache.get("466753794244345866").avatarURL({dynamic: true, size: 4096}));
+					channel.send(settingsOBJ[servidor].menciona, embed);
+				}
+				client.channels.cache.get(DIRECTOS).send(response.data[0].started_at);
+			}
+		).catch(console.error);
 	});
 };
 
@@ -91,6 +117,9 @@ client.on('message', msg => {
       case "notifica":
         beto.notificar(msg, sazonador)
       break;
+			case "menciona":
+        beto.mencionar(msg, sazonador)
+      break;
       case "directo":
         beto.directo(msg)
       break;
@@ -115,32 +144,9 @@ client.on('guildMemberAdd', member => {
 
 setInterval(
   function(){
-    getStream(GET_STREAM, AT, (response) => {
-      let channel = client.channels.cache.get(settingsOBJ[member.guild.id].saludo);
-      let shouldReNotify;
-      if (!channel) return;
-      if (response.data.length < 1) return;
-      client.channels.cache.get(DIRECTOS).messages.fetch({ limit: 1 }).then(
-        messages => {
-          shouldReNotify = messages.first().content;
-        }
-      ).catch(console.error);
-      if (shouldReNotify == response.data[0].started_at) return;
-      let embed = new Discord.MessageEmbed()
-      .setTitle("¡betinraw está en directo!")
-      .setAuthor("Twitch", "https://img.icons8.com/nolan/452/twitch.png")
-      .setURL("https://www.twitch.tv/betinraw")
-      .setColor("#6441A5")
-      .setDescription(response.data[0].title)
-      .addField("\u200b", response.data[0].game_name)
-      .addField("\u200b", "Espectadores: " + response.data[0].viewer_count)
-      .setImage(response.data[0].thumbnail_url)
-      .setThumbnail(client.users.cache.get("466753794244345866").avatarURL({dynamic: true, size: 4096}));
-      channel.send(embed);
-      client.channels.cache.get(DIRECTOS).send(response.data[0].started_at);
-    })
+    getStream(GET_STREAM, AT)
   },
-  120000
+  60000
 );
 
 setInterval(
