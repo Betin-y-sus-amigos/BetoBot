@@ -79,7 +79,7 @@ const getStream = (url, access) => {
 					.setColor("#6441A5")
 					.setDescription(response.data[0].title)
 					.addField(response.data[0].game_name, "Espectadores: " + response.data[0].viewer_count)
-					.setImage(response.data[0].thumbnail_url.replace("{width}", "1920").replace("{height}", "1080"))
+					.setImage(new Discord.MessageAttachment(request(response.data[0].thumbnail_url.replace("{width}", "1920").replace("{height}", "1080"))).url)
 					.setThumbnail(client.users.cache.get("466753794244345866").avatarURL({dynamic: true, size: 4096}));
 					channel.send(settingsOBJ[servidor].menciona, embed);
 				}
