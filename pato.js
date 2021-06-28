@@ -5,6 +5,8 @@ global.fs = require('fs');
 global.download = require('download-file');
 global.request = require('request');
 
+global.MINIS = "858933837764886528";
+
 global.beto = require('require-all')(__dirname + '/cuak');
 global.ajustes = "854227144925904906";
 global.settingsOBJ = null;
@@ -34,50 +36,54 @@ getToken = (url, callback) => {
 	});
 };
 
-let AT = '';
+global.AT = '';
 getToken(GET_TOKEN,(res) => {
 	console.log(res.body);
-	AT = res.body.access_token;
-	return AT;
-});
-
-const getStream = (url, access) => {
-  const streamOptions = {
+	global.AT = res.body.access_token;
+	global.streamOptions = {
 		url: GET_STREAM,
 		method: "GET",
 		headers: {
 			'Client-ID': process.env.TWITCH,
-    		'Authorization': 'Bearer ' + access
-        },
-        qs: {
+				'Authorization': 'Bearer ' + AT
+				},
+				qs: {
 			'user_login': 'betinraw'
 		}
 	}
+});
 
-	request.get(streamOptions, (err, res, body) => {
+const getStream = () => {
+  request.get(streamOptions, (err, res, body) => {
 		if(err) {
 			return console.log(err);
 		}
 		console.log(`Status: ${res.statusCode}`);
 		let response = JSON.parse(body);
-		client.channels.cache.get(DIRECTOS).messages.fetch({ limit: 1 }).then(
-			messages => {
-				let shouldReNotify = messages.first().content;
-				for (servidor in settingsOBJ) {
-					let channel = client.channels.cache.get(settingsOBJ[servidor].notificaciones);
-					if (!channel) return;
-					if (response.data.length < 1) return;
-					console.log("el directo actual data de " + response.data[0].started_at);
-					if (shouldReNotify == response.data[0].started_at) {
-						console.log("ya hay una notificación del mismo");
-						return;
+		request(response.data[0].thumbnail_url.replace("{width}", "1920").replace("{height}", "1080")).pipe(fs.createWriteStream('./directo.jpg')).on('close', ()=>{
+      let someImage = new Discord.MessageAttachment(fs.createReadStream('./directo.jpg'));
+				client.channels.cache.get(DIRECTOS).messages.fetch({ limit: 1 }).then(
+					messages => {
+						let shouldReNotify = messages.first().content;
+						if (response.data.length < 1) return;
+						console.log("el directo actual data de " + response.data[0].started_at + " => " + response.data[0].game_name);
+						if (shouldReNotify == response.data[0].started_at + " => " + response.data[0].game_name) {
+							console.log("ya hay una notificación del mismo");
+							return;
+						}
+						client.channels.cache.get(MINIS).send(someImage).then( messymessage => {
+							for (servidor in settingsOBJ) {
+								let channel = client.channels.cache.get(settingsOBJ[servidor].notificaciones);
+								if (!channel) return;
+
+								let embed = beto.directoEmbed(response, messymessage);
+								channel.send(settingsOBJ[servidor].menciona, embed);
+							}
+							client.channels.cache.get(DIRECTOS).send(response.data[0].started_at + " => " + response.data[0].game_name);
+						});
 					}
-					let embed = beto.directoEmbed();
-					channel.send(settingsOBJ[servidor].menciona, embed);
-				}
-				client.channels.cache.get(DIRECTOS).send(response.data[0].started_at);
-			}
-		).catch(console.error);
+				).catch(console.error);
+		});
 	});
 };
 
@@ -139,7 +145,7 @@ client.on('guildMemberAdd', member => {
 
 setInterval(
   function(){
-    getStream(GET_STREAM, AT)
+    getStream()
   },
   60000
 );
@@ -148,8 +154,18 @@ setInterval(
   function(){
     getToken(GET_TOKEN,(res) => {
     	console.log(res.body);
-    	AT = res.body.access_token;
-    	return AT;
+    	global.AT = res.body.access_token;
+			global.streamOptions = {
+				url: GET_STREAM,
+				method: "GET",
+				headers: {
+					'Client-ID': process.env.TWITCH,
+						'Authorization': 'Bearer ' + AT
+						},
+						qs: {
+					'user_login': 'betinraw'
+				}
+			}
     });
   },
   5000000
