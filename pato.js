@@ -60,12 +60,12 @@ const getStream = () => {
 		}
 		console.log(`Status: ${res.statusCode}`);
 		let response = JSON.parse(body);
+		if (response.data.length < 1) return;
 		request(response.data[0].thumbnail_url.replace("{width}", "1920").replace("{height}", "1080")).pipe(fs.createWriteStream('./directo.jpg')).on('close', ()=>{
       let someImage = new Discord.MessageAttachment(fs.createReadStream('./directo.jpg'));
 				client.channels.cache.get(DIRECTOS).messages.fetch({ limit: 1 }).then(
 					messages => {
 						let shouldReNotify = messages.first().content;
-						if (response.data.length < 1) return;
 						console.log("el directo actual data de " + response.data[0].started_at + " => " + response.data[0].game_name);
 						if (shouldReNotify == response.data[0].started_at + " => " + response.data[0].game_name) {
 							console.log("ya hay una notificación del mismo");
