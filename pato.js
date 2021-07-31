@@ -107,24 +107,24 @@ client.on('message', msg => {
     }
 
     switch (rebanada) {
-      case "saluda":
-        beto.saludar(msg, sazonador)
-      break;
-      case "notifica":
-        beto.notificar(msg, sazonador)
-      break;
-			case "menciona":
-        beto.mencionar(msg, sazonador)
-      break;
-      case "directo":
-        beto.directo(msg)
-      break;
-			case "muere":
-        beto.morir(msg)
-      break;
-      default:
-        msg.channel.send("dime");
-      break;
+      	case "saluda":
+        	beto.saludar(msg, sazonador)
+      	break;
+      	case "notifica":
+        	beto.notificar(msg, sazonador)
+      	break;
+		case "menciona":
+        	beto.mencionar(msg, sazonador)
+      	break;
+      	case "directo":
+        	beto.directo(msg)
+      	break;
+		case "muere":
+        	beto.morir(msg)
+      	break;
+      	default:
+        	msg.channel.send("dime");
+      	break;
     }
   }
 });
@@ -143,6 +143,10 @@ client.on('guildMemberAdd', member => {
 
 setInterval(
   function(){
+	 if (settingsOBJ === null || Object.keys(settingsOBJ).length === 0) {
+		console.log('objeto global de ajustes recargado');
+		global.settingsOBJ = JSON.parse(fs.readFileSync('./ajustes.txt'));
+	 }
     getStream()
   },
   60000
