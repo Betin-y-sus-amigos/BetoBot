@@ -87,15 +87,13 @@ const getStream = () => {
 	});
 };
 
-client.on('ready', () => {
-  console.log(`iniciando sesión como ${client.user.tag}!`);
-  beto.fetch(ajustes);
-  if (settingsOBJ == null) {
-      if (!fs.existsSync('./ajustes.txt')) {
-        return
-      }
-      global.settingsOBJ = JSON.parse(fs.readFileSync('./ajustes.txt'));
-  }
+client.on('ready', async () => {
+  	console.log(`iniciando sesión como ${client.user.tag}!`);
+  	await beto.fetch(ajustes);
+    if (!fs.existsSync('./ajustes.txt')) {
+    	return
+    }
+	global.settingsOBJ = JSON.parse(fs.readFileSync('./ajustes.txt'));
 });
 
 client.on('message', msg => {
